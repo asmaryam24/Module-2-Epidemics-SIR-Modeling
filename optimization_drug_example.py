@@ -28,12 +28,16 @@ def escitalopram(x):  # weaker efficacy, low toxicity
     toxicity = 0.1 * x**2 / 120
     return efficacy - escitalopram_lambda * toxicity
 
+def ideal_dose(x):
+    return metformin(x) + lisinopril(x) + escitalopram(x)
+
 #%% plot drug efficacies
 x = np.linspace(0, 15, 100)
 fig, ax = plt.subplots(figsize=(10, 6))
 plt.plot(x, metformin(x), label='Metformin', color='blue')
 plt.plot(x, lisinopril(x), label='Lisinopril', color='orange')
 plt.plot(x, escitalopram(x), label='Escitalopram', color='green')
+plt.plot(x, ideal_dose(x), label='Ideal Dose', color='red', linestyle='--')
 plt.title('Drug Efficacy vs Dosage')
 plt.xlabel('Dosage (mg)')
 plt.ylabel('Net Effect')
@@ -76,6 +80,10 @@ opt_dose_escitalopram, opt_effect_escitalopram = steepest_ascent(escitalopram, x
 print(f"Steepest Ascent Method - Optimal Escitalopram Dose: {opt_dose_escitalopram:.2f} mg")
 print(f"Steepest Ascent Method - Optimal Escitalopram Effect: {opt_effect_escitalopram*100:.2f}%")
 
+opt_dose_ideal, opt_effect_ideal = steepest_ascent(ideal_dose, x0=1.0)
+print(f"Steepest Ascent Method - Optimal Ideal Dose: {opt_dose_ideal:.2f} mg")
+print(f"Steepest Ascent Method - Optimal Ideal Effect: {opt_effect_ideal*100:.2f}%")
+
 # %% Newton's method
 
 # requires second derivative
@@ -116,3 +124,7 @@ print(f"Newton's Method - Optimal Lisinopril Effect: {opt_effect_lisinopril_nm*1
 opt_dose_escitalopram_nm, opt_effect_escitalopram_nm = newtons_method(escitalopram, x0=1.0)
 print(f"Newton's Method - Optimal Escitalopram Dose: {opt_dose_escitalopram_nm:.2f} mg")
 print(f"Newton's Method - Optimal Escitalopram Effect: {opt_effect_escitalopram_nm*100:.2f}%")
+
+opt_dose_ideal_nm, opt_effect_ideal_nm = newtons_method(ideal_dose, x0=1.0)
+print(f"Newton's Method - Optimal Ideal Dose: {opt_dose_ideal_nm:.2f} mg")
+print(f"Newton's Method - Optimal Ideal Effect: {opt_effect_ideal_nm*100:.2f}%")
