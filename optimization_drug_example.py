@@ -28,20 +28,21 @@ def escitalopram(x):  # weaker efficacy, low toxicity
     toxicity = 0.1 * x**2 / 120
     return efficacy - escitalopram_lambda * toxicity
 
-def ideal_dose(x):
-    return metformin(x) + lisinopril(x) + escitalopram(x)
-
 #%% plot drug efficacies
 x = np.linspace(0, 15, 100)
 fig, ax = plt.subplots(figsize=(10, 6))
+
+def combined_effect(x):    
+    return metformin(x) + lisinopril(x) + escitalopram(x)
+
 plt.plot(x, metformin(x), label='Metformin', color='blue')
 plt.plot(x, lisinopril(x), label='Lisinopril', color='orange')
 plt.plot(x, escitalopram(x), label='Escitalopram', color='green')
-plt.plot(x, ideal_dose(x), label='Ideal Dose', color='red', linestyle='--')
 plt.title('Drug Efficacy vs Dosage')
 plt.xlabel('Dosage (mg)')
 plt.ylabel('Net Effect')
 plt.legend()
+plt.plot(x, combined_effect(x), 'r--', linewidth=2, label='Combined Effect')
 
 # %% Find optimal dosages for each drug
 
@@ -79,10 +80,6 @@ print(f"Steepest Ascent Method - Optimal Lisinopril Effect: {opt_effect_lisinopr
 opt_dose_escitalopram, opt_effect_escitalopram = steepest_ascent(escitalopram, x0=1.0)
 print(f"Steepest Ascent Method - Optimal Escitalopram Dose: {opt_dose_escitalopram:.2f} mg")
 print(f"Steepest Ascent Method - Optimal Escitalopram Effect: {opt_effect_escitalopram*100:.2f}%")
-
-opt_dose_ideal, opt_effect_ideal = steepest_ascent(ideal_dose, x0=1.0)
-print(f"Steepest Ascent Method - Optimal Ideal Dose: {opt_dose_ideal:.2f} mg")
-print(f"Steepest Ascent Method - Optimal Ideal Effect: {opt_effect_ideal*100:.2f}%")
 
 # %% Newton's method
 
@@ -125,6 +122,49 @@ opt_dose_escitalopram_nm, opt_effect_escitalopram_nm = newtons_method(escitalopr
 print(f"Newton's Method - Optimal Escitalopram Dose: {opt_dose_escitalopram_nm:.2f} mg")
 print(f"Newton's Method - Optimal Escitalopram Effect: {opt_effect_escitalopram_nm*100:.2f}%")
 
-opt_dose_ideal_nm, opt_effect_ideal_nm = newtons_method(ideal_dose, x0=1.0)
-print(f"Newton's Method - Optimal Ideal Dose: {opt_dose_ideal_nm:.2f} mg")
-print(f"Newton's Method - Optimal Ideal Effect: {opt_effect_ideal_nm*100:.2f}%")
+#Combined Effect Curve 
+def combined_effect(x):    
+    return metformin(x) + lisinopril(x) + escitalopram(x)
+
+# plot combined effect
+plt.plot(x, combined_effect(x), 'r--', label='Combined Effect')
+plt.legend()
+plt.show()
+
+# find optimal dose for combined effect using Newton (cleaner)
+opt_dose_combined, opt_effect_combined = newtons_method(combined_effect, x0=5.0)
+print(f"\nCombined Effect - Optimal Dose: {opt_dose_combined:.2f} mg")
+print(f"Combined Effect - Optimal Effect: {opt_effect_combined*100:.2f}%")
+
+
+
+#%% --- Tune Metformin lambda to match combined optimal dose ---
+
+target_dose = opt_dose_combined
+lambda_values = np.linspace(0.1, 2.0, 40)
+best_lambda = None
+best_gap = float('inf')
+
+for lam in lambda_values:   
+    def met_temp(x):       
+        efficacy = 0.8 * np.exp(-0.1*(x-5)**2)        
+        toxicity = 0.2 * x**2 / 100        
+        return efficacy - lam * toxicity        
+    
+    dose, _ = newtons_method(met_temp, x0=5.0)    
+    gap = abs(dose - target_dose)    
+    
+    if gap < best_gap:        
+        best_gap = gap        
+        best_lambda = lam        
+        best_dose = dose
+        
+
+print("\n--- Lambda Tuning Results ---")
+print(f"Target combined-optimal dose: {target_dose:.2f} mg")
+print(f"Best lambda for Metformin: {best_lambda:.3f}")
+print(f"Metformin optimal dose at this lambda: {best_dose:.2f} mg")
+print(f"Difference from target: {best_gap:.4f} mg")
+
+
+
