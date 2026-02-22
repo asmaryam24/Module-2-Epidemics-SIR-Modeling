@@ -81,6 +81,11 @@ opt_dose_escitalopram, opt_effect_escitalopram = steepest_ascent(escitalopram, x
 print(f"Steepest Ascent Method - Optimal Escitalopram Dose: {opt_dose_escitalopram:.2f} mg")
 print(f"Steepest Ascent Method - Optimal Escitalopram Effect: {opt_effect_escitalopram*100:.2f}%")
 
+opt_dose_combined_sa, opt_effect_combined_sa = steepest_ascent(combined_effect, x0=5.0)
+print(f"Steepest Ascent - Combined Optimal Dose: {opt_dose_combined_sa:.2f} mg")
+print(f"Steepest Ascent - Combined Optimal Effect: {opt_effect_combined_sa*100:.2f}%")
+
+
 # %% Newton's method
 
 # requires second derivative
