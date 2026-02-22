@@ -1,0 +1,24 @@
+#Plot the DATA RELEASE #1 data: day vs. active infections
+
+#import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the CSV file
+df = pd.read_csv(r"C:\Users\Asma Sanaullah\OneDrive - University of Virginia\Spring 2026\COMP BME\Module-2-Epidemics-SIR-Modeling\Data\mystery_virus_daily_active_counts_RELEASE#1.csv")
+
+# Create scatterplot
+plt.scatter(df['day'], df['active reported daily cases'])
+
+# Plot labels and titles
+plt.title('Day vs Active Infections')
+plt.xlabel('Day')
+plt.ylabel('Active Infections')
+
+# Display the plot
+plt.show()
+
+#QUESTIONS TO ANSWER:
+# What do you notice about the initial infections?
+# How could we measure how quickly its spreading?
+# What information about the virus would be helpful in determining the shape of the outbreak curve?
