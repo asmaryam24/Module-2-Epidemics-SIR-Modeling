@@ -20,5 +20,9 @@ plt.show()
 
 #QUESTIONS TO ANSWER:
 # What do you notice about the initial infections?
+  The initial infections grow very slowly, with the curve nearly flat at the beginning. This indicates that only a small number of people are infected early on, making the outbreak appear minor at first.
 # How could we measure how quickly its spreading?
+
+
 # What information about the virus would be helpful in determining the shape of the outbreak curve?
+
