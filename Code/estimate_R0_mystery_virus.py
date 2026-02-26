@@ -10,9 +10,25 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # - Settings  -
+<<<<<<< HEAD
+csv_path = Path("Data") / "mystery_virus_daily_active_counts_RELEASE.csv"
+infectious_period_days = 5.0  
+min_window = 7                # minimum length (days) of the exponential window
+max_window = 14               # maximum length (days) of the exponential window
+
+#- File-relative path (robust) -
+HERE = Path(__file__).resolve().parent
+csv_path = HERE / "Data" / "mystery_virus_daily_active_counts_RELEASE.csv"
+print("Using CSV at:", csv_path)
+
+if not csv_path.exists():    
+    raise FileNotFoundError(f"Could not find CSV at: {csv_path}\n"                            
+                            "Check the filename and folder exactly.")
+=======
 infectious_period_days = 5.0
 min_window = 7
 max_window = 14
+>>>>>>> f0a4222042e96cec350d53b79d14bb591b1e922f
 
 
 csv_path = Path("mystery_virus_daily_active_counts_RELEASE#1.csv")
@@ -44,8 +60,7 @@ I = df["active_reported_daily_cases"].astype(float).to_numpy()
 
 # Guard against nonpositive I values (log undefined)
 if np.any(I <= 0):    
-    # Replace zeros (if any) by a tiny positive value for logging;   
-    # or you can drop those rows if preferred.    
+      
     I = np.where(I <= 0, 1e-6, I)
 
 # - Helper to fit a window and return r, I0, r2
