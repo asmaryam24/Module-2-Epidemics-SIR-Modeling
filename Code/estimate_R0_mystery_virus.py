@@ -11,7 +11,7 @@ from pathlib import Path
 
 # - Settings  -
 csv_path = Path("Data") / "mystery_virus_daily_active_counts_RELEASE.csv"
-infectious_period_days = 5.0  # <-- CHANGE if your class uses a different infectious period D
+infectious_period_days = 5.0  
 min_window = 7                # minimum length (days) of the exponential window
 max_window = 14               # maximum length (days) of the exponential window
 
@@ -47,8 +47,7 @@ I = df["active_reported_daily_cases"].astype(float).to_numpy()
 
 # Guard against nonpositive I values (log undefined)
 if np.any(I <= 0):    
-    # Replace zeros (if any) by a tiny positive value for logging;   
-    # or you can drop those rows if preferred.    
+      
     I = np.where(I <= 0, 1e-6, I)
 
 # - Helper to fit a window and return r, I0, r2
