@@ -10,26 +10,23 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # - Settings  -
-csv_path = Path("Data") / "mystery_virus_daily_active_counts_RELEASE.csv"
-infectious_period_days = 5.0  # <-- CHANGE if your class uses a different infectious period D
-min_window = 7                # minimum length (days) of the exponential window
-max_window = 14               # maximum length (days) of the exponential window
-
-#- File-relative path (robust) -
-HERE = Path(__file__).resolve().parent
-csv_path = HERE / "Data" / "mystery_virus_daily_active_counts_RELEASE.csv"
-print("Using CSV at:", csv_path)
-
-if not csv_path.exists():    
-    raise FileNotFoundError(f"Could not find CSV at: {csv_path}\n"                            
-                            "Check the filename and folder exactly.")
+infectious_period_days = 5.0
+min_window = 7
+max_window = 14
 
 
-# - Load data
-if not csv_path.exists():    
-    raise FileNotFoundError(f"Could not find: {csv_path.resolve()}")
+csv_path = Path("mystery_virus_daily_active_counts_RELEASE#1.csv")
+print("Using CSV at:", csv_path.resolve())
 
+if not csv_path.exists():
+    raise FileNotFoundError(
+        f"Could not find CSV at: {csv_path.resolve()}\n"
+        "Make sure the CSV is in the same folder as this script/notebook."
+    )
+
+# ---- Load data ----
 df = pd.read_csv(csv_path)
+
 
 # Standardize column names (lowercase, replace spaces with underscores)
 df.columns = [c.strip().lower().replace(" ", "_") for c in df.columns]
