@@ -1,18 +1,24 @@
 import os
+import pandas as pd
 from pathlib import Path
 HERE = Path(__file__).resolve().parent
 
-# Because your CSV is now in the SAME folder as this .py file
-csv_path = HERE / "mystery_virus_daily_active_counts_RELEASE#1.csv"
+# ----------------------
+# Path to your CSV (same folder as this script)
+# ----------------------
+csv_filename = "mystery_virus_daily_active_counts_RELEASE#1.csv"
+csv_path = HERE / csv_filename
 
-print("Using CSV at:", csv_path)
+print("Using CSV at:", csv_path.resolve())
 
+# Check if the file exists
+if not csv_path.exists():
+    raise FileNotFoundError(
+        f"Could not find CSV at: {csv_path.resolve()}\n"
+        "Make sure the CSV is in the same folder as this script."
+    )
 
-from pathlib import Path
-HERE = Path(__file__).resolve().parent
-sir_csv = HERE / "in_class_SIR_data.csv"   # <-- OR whatever the real name is
-
-df = pd.read_csv(sir_csv)
+df = pd.read_csv(csv_path)
 
 
 
@@ -29,14 +35,13 @@ for p in Path(".").rglob("*.csv"):
 
 
 
-import pandas as pd
 import matplotlib.pyplot as plt
 
 # -Load your S, I, R data -
 
 # Replace with the correct filename from your repo
 
-df = pd.read_csv("ANALYSIS DATA RELEASE #1 data/in_class_SIR_data.csv")
+df = pd.read_csv(csv_path)
 days = df["day"]
 S = df["S"]
 I = df["I"]
