@@ -135,6 +135,8 @@ def optimize_SEIR(timepoints, N, S0, E0, I0, R0, data):
     #return best_beta, best_sigma, best_gamma and correspondsing SSE
     return best_beta, best_sigma, best_gamma, lowest_SSE
 
+
+
 #-----------------------------------------------------
 
 
@@ -210,4 +212,33 @@ def predict_peak(best_beta, best_sigma, best_gamma):
 
 # %%
 
+#TESTING THE FUNCTIONS
+#Set initial conditions and parameters for testing
+N = 17900
+I0 = 1
+E0 = 1   # assume 1 exposed person
+R0 = 0
 
+# Susceptible population
+S0 = N - I0 - E0 - R0
+
+# Timepoints based on dataset length
+timepoints = np.arange(len(data))
+
+# -------------------------------
+# Run optimization to find best parameters
+# -------------------------------
+
+best_beta, best_sigma, best_gamma, best_SSE = optimize_SEIR(
+    timepoints, N, S0, E0, I0, R0, data
+)
+
+# Print results
+print("Best beta:", best_beta)
+print("Best sigma:", best_sigma)
+print("Best gamma:", best_gamma)
+print("Lowest SSE:", best_SSE)
+
+
+
+# %%
