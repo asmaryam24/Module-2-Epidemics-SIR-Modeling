@@ -7,6 +7,8 @@ import numpy as np
 from scipy.optimize import curve_fit
 from pathlib import Path
 
+from Code.plot_SIR_inclass import E0, I0, R0, S0
+
 #-----OVERALL GOAL-------
 #How to predict the peak of the epidemic?
     #What do we need to be able to predict the future?
@@ -145,7 +147,47 @@ def optimize_SEIR(timepoints, N, S0, E0, I0, R0, data):
 
 def predict_peak(best_beta, best_sigma, best_gamma):
    
+#-----------STEP 3---------------
+#predicting the peak 
 
+#INPUTS: best_beta, best_sigma, best_gamma
+# • Use Euler's method to run the model many more days
+# • Find when I(t) reaches its maximum
+# • Report peak size and peak date
+
+    def predict_peak(best_beta, best_sigma, best_gamma):    
+    # extend simulation beyond observed data    
+        extra_days = 200      
+        total_days = len(data) + extra_days    
+        time_ext = np.arange(total_days)    
+    
+    # run the SEIR model with best-fit parameters    
+    S, E, I, R = eulerapprox_SEIR(best_beta, best_sigma, best_gamma, 
+                                  S0, E0, I0, R0, time_ext, N)    
+    
+    # find peak of I(t)    
+    peak_idx = np.argmax(I)    
+    peak_value = I[peak_idx]    
+    
+    # find the date corresponding to the peak    
+    start_date = data['date'].iloc[0]    
+    peak_date = start_date + pd.Timedelta(days=int(peak_idx))    
+    
+    # plot   
+    full_dates = pd.date_range(start=start_date, periods=total_days, freq='D')       
+    plt.figure(figsize=(10,4))    
+    plt.plot(data['date'], data['active reported daily cases'], 'ro', label='data')    
+    plt.plot(full_dates, I, label='model I(t)')    
+    plt.axvline(peak_date, color='k', linestyle='--')    
+    plt.title("Predicted Peak of Infection")    
+    plt.xlabel("Date")    
+    plt.ylabel("I(t)")    
+    plt.legend()    
+    plt.tight_layout()    
+    plt.show()    
+    print("Predicted peak infected:", peak_value)    
+    print("Predicted peak date:", peak_date.date())    
+    return peak_value, peak_date
 
 
 
@@ -155,3 +197,5 @@ def predict_peak(best_beta, best_sigma, best_gamma):
     #Implement Euler’s method for SEIR modeling
     #• Plot Euler’s method solutions for I(t) and compare to your data
     #• Guess beta, sigma, and gamma and calculate SSE
+
+# %%
