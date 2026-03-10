@@ -7,7 +7,6 @@ import numpy as np
 from scipy.optimize import curve_fit
 from pathlib import Path
 
-#from Code.plot_SIR_inclass import E0, I0, R0, S0
 
 #-----OVERALL GOAL-------
 #How to predict the peak of the epidemic?
@@ -167,6 +166,55 @@ def predict_peak(best_beta, best_sigma, best_gamma):
     return peak_value, peak_day #return the predicted peak value and the day of the peak
 
 
+
+#Next steps in your code:
+    #Implement Euler’s method for SEIR modeling
+    #• Plot Euler’s method solutions for I(t) and compare to your data
+    #• Guess beta, sigma, and gamma and calculate SSE
+
+# %%
+
+#TESTING THE FUNCTIONS
+#Set initial conditions and parameters for testing
+N = 17900
+I0 = 1
+E0 = 1   # assume 1 exposed person
+R0 = 0
+
+# Susceptible population
+S0 = N - I0 - E0 - R0
+
+# Timepoints based on dataset length
+timepoints = np.arange(len(data))
+
+
+best_beta, best_sigma, best_gamma, best_SSE = optimize_SEIR(
+    timepoints, N, S0, E0, I0, R0, data)
+
+# Print results
+print("Best beta:", best_beta)
+print("Best sigma:", best_sigma)
+print("Best gamma:", best_gamma)
+print("Lowest SSE:", best_SSE)
+
+
+
+# %%
+peak_value, peak_day = predict_peak(best_beta, best_sigma, best_gamma)
+
+print("Predicted peak infections:", peak_value)
+print("Predicted peak day:", peak_day)
+# %%
+
+
+
+
+
+
+
+
+#from Code.plot_SIR_inclass import E0, I0, R0, S0
+
 '''
 def predict_peak(best_beta, best_sigma, best_gamma):    
     # extend simulation beyond observed data    
@@ -203,42 +251,3 @@ def predict_peak(best_beta, best_sigma, best_gamma):
     return peak_value, peak_date
 
 '''
-
-
-#Next steps in your code:
-    #Implement Euler’s method for SEIR modeling
-    #• Plot Euler’s method solutions for I(t) and compare to your data
-    #• Guess beta, sigma, and gamma and calculate SSE
-
-# %%
-
-#TESTING THE FUNCTIONS
-#Set initial conditions and parameters for testing
-N = 17900
-I0 = 1
-E0 = 1   # assume 1 exposed person
-R0 = 0
-
-# Susceptible population
-S0 = N - I0 - E0 - R0
-
-# Timepoints based on dataset length
-timepoints = np.arange(len(data))
-
-# -------------------------------
-# Run optimization to find best parameters
-# -------------------------------
-
-best_beta, best_sigma, best_gamma, best_SSE = optimize_SEIR(
-    timepoints, N, S0, E0, I0, R0, data
-)
-
-# Print results
-print("Best beta:", best_beta)
-print("Best sigma:", best_sigma)
-print("Best gamma:", best_gamma)
-print("Lowest SSE:", best_SSE)
-
-
-
-# %%
