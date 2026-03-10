@@ -7,7 +7,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 from pathlib import Path
 
-from Code.plot_SIR_inclass import E0, I0, R0, S0
+#from Code.plot_SIR_inclass import E0, I0, R0, S0
 
 #-----OVERALL GOAL-------
 #How to predict the peak of the epidemic?
@@ -128,11 +128,12 @@ def optimize_SEIR(timepoints, N, S0, E0, I0, R0, data):
                 parameters.append((b, s, g)) #this adds the parameters to the list
     
     #Determine parameters corresponding to lowest SSE
-    corres_SSE = SSE_array.index(min(SSE_array)) #this finds the index of the minimum SSE in the SSE array, which corresponds to the best parameters
+    lowest_SSE = min(SSE_array)
+    corres_SSE = SSE_array.index(lowest_SSE) #this finds the index of the minimum SSE in the SSE array
     best_beta, best_sigma, best_gamma = parameters[corres_SSE] #this finds the best parameters using the index of the minimum SSE
 
     #return best_beta, best_sigma, best_gamma and correspondsing SSE
-    return best_beta, best_sigma, best_gamma, corres_SSE
+    return best_beta, best_sigma, best_gamma, lowest_SSE
 
 #-----------------------------------------------------
 
@@ -145,7 +146,6 @@ def optimize_SEIR(timepoints, N, S0, E0, I0, R0, data):
     #• How high is the peak? Is that a reasonable value?
     #• What day will the peak occur?
 
-def predict_peak(best_beta, best_sigma, best_gamma):
    
 #-----------STEP 3---------------
 #predicting the peak 
@@ -155,7 +155,18 @@ def predict_peak(best_beta, best_sigma, best_gamma):
 # • Find when I(t) reaches its maximum
 # • Report peak size and peak date
 
-    def predict_peak(best_beta, best_sigma, best_gamma):    
+def predict_peak(best_beta, best_sigma, best_gamma):
+    extra_days = 200 #number of extra days to run the model beyond the observed data
+    time_extra = np.arange(0,extra_days) #time points for the extended simulation (0 to extra_days)
+    S, E, I, R = eulerapprox_SEIR(best_beta, best_sigma, best_gamma, S0, E0, I0, R0, time_extra, N) #run the SEIR model with best-fit parameters for the extended time points
+    peak_value = np.max(I) #find the maximum value of I(t) which is the peak number of infected individuals
+    peak_day = time_extra[np.argmax(I)] #find the day corresponding to the peak by finding the index of the maximum I and using that index to find the corresponding day in time_extra
+
+    return peak_value, peak_day #return the predicted peak value and the day of the peak
+
+
+'''
+def predict_peak(best_beta, best_sigma, best_gamma):    
     # extend simulation beyond observed data    
         extra_days = 200      
         total_days = len(data) + extra_days    
@@ -189,8 +200,7 @@ def predict_peak(best_beta, best_sigma, best_gamma):
     print("Predicted peak date:", peak_date.date())    
     return peak_value, peak_date
 
-
-
+'''
 
 
 #Next steps in your code:
@@ -199,3 +209,5 @@ def predict_peak(best_beta, best_sigma, best_gamma):
     #• Guess beta, sigma, and gamma and calculate SSE
 
 # %%
+
+
