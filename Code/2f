@@ -77,7 +77,7 @@ E0 = 5
 R0 = 0
 S0 = N - I0 - E0 - R0
 
-S_full, E_full, I_full, R_full = eulerapprox_SEIR(best_beta, best_sigma, best_gamma, S0, E0, I0, R0,
+S_data, E_data, I_data, R_data = eulerapprox_SEIR(best_beta, best_sigma, best_gamma, S0, E0, I0, R0,
     timepoints_full,N)
 
 plt.figure()
@@ -86,13 +86,13 @@ plt.figure()
 plt.scatter(
     data['day'],
     data['active reported daily cases'],
-    label="Observed Data (Release #3)"
+    label="Data Release #3"
 )
 
 # model prediction
 plt.plot(
     timepoints_full,
-    I_full,
+    I_data,
     color="red",
     label="SEIR Model Prediction"
 )
@@ -103,3 +103,4 @@ plt.title("SEIR Model vs Full Dataset")
 plt.legend()
 
 plt.show()
+# %%

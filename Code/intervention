@@ -146,7 +146,8 @@ print (f"Total cases prevented with vaccine intervention: {cases_prevented_vacci
 print (f"Total cases prevented with closure intervention: {cases_prevented_closure}")
 
 
-
+#to model interventions from day 70 to 120
+cases_prevented_masking = (R_baseline[-1] + I_baseline[-1]) - (R_baseline[69] + I_baseline[69]) \
 
 
 # %%

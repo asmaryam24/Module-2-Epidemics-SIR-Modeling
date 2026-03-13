@@ -55,3 +55,5 @@ plt.legend()
 plt.show()
 
 
+
+# %%

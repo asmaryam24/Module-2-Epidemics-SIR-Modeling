@@ -200,6 +200,7 @@ print("Best gamma:", best_gamma)
 print("Lowest SSE:", best_SSE)
 
 
+
 #2e
 S, E, I, R = eulerapprox_SEIR( best_beta, best_sigma, best_gamma, S0, E0, I0, R0, timepoints, N )
 plt.figure() # observed data 
@@ -218,6 +219,20 @@ peak_value, peak_day = predict_peak(best_beta, best_sigma, best_gamma, S0, E0, I
 print("Predicted peak infections:", peak_value)
 print("Predicted peak day:", peak_day)
 
+
+
+# %%
+#plotting the model to see the predicted progression of the epidemic past the data we have
+extra_days = len(data) + 200
+time_extra = np.arange(0, extra_days)
+S, E, I, R = eulerapprox_SEIR(best_beta, best_sigma, best_gamma,
+                                  S0, E0, I0, R0, time_extra, N)
+plt.figure()
+plt.plot(time_extra, I, color="red", label="SEIR Model Prediction")
+plt.xlabel("Day")
+plt.ylabel("Active Infections")
+plt.title("SEIR Model Prediction of Disease")
+plt.legend()
 
 
 # %%
