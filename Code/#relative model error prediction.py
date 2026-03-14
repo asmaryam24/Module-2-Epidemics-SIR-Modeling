@@ -34,9 +34,11 @@ print("Actual peak day:", actual_peak_day)
 
 #comparing model and dataset peaks
 #True error & percent relative error
+#Predicted peak infections: 3039.4968290416637
+#Predicted peak day: 78
 
-model_peak_value = 2903
-model_peak_day = 116
+model_peak_value = 3039.4968290416637
+model_peak_day = 78
 true_error_peak_value = abs(model_peak_value - actual_peak_value)
 relative_error_peak_value = true_error_peak_value / actual_peak_value * 100
 true_error_peak_day = abs(model_peak_day - actual_peak_day)

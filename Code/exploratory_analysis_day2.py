@@ -42,7 +42,7 @@ print(f"Estimated growth rate (r): {est_r:.4f} per day")
 t_fit = np.linspace(min(t), max(t), 100) # this creates the fitted curve to plot for x_data (days)
 cases_fit = exponential_growth(t_fit, est_r) # this finds the y_data (active cases) for the fitted curve
 
-D = 9
+D = 9 #9 days is infectious period 
 R0 = 1 + est_r * D
 print(f"Estimated R0: {R0:.4f}")
 # Add the fit as a line on top of your scatterplot.
@@ -53,6 +53,7 @@ plt.xlabel('Day')
 plt.ylabel('Active Infections')
 plt.legend()
 plt.show()
+
 
 
 # %%
